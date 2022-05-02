@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import {initializeApp} from "firebase/app";
 import {getAnalytics} from "firebase/analytics";
-import {get, getDatabase, ref, set, child, onValue} from "firebase/database";
+import {get, getDatabase, ref, set, child} from "firebase/database";
 
 import "../form.css";
-import { type } from "@testing-library/user-event/dist/type";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAJDQNNmSpwplbJfN8vWTFP5gXbIpHNeOA",
@@ -20,6 +19,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
+let userFlag = true,
+    emailFlag = true,
+    numberFlag = true;
+
 const Form = () => {
 
     const [nameData, setNameData] = useState("");
@@ -31,9 +34,6 @@ const Form = () => {
     }, [emailData], [nameData], [ldNumberData]);
 
     const readUserData = (email, ld_number, username) => {
-
-        console.log(email, ld_number, username);
-
         const dbRef = ref(getDatabase());
 
         get(child(dbRef, `users/`)).then((snapshot) => {
@@ -41,19 +41,23 @@ const Form = () => {
                 const dataSnapshot = snapshot.val();
 
                 for (const data in dataSnapshot) {
-                    console.log("EMAIL: ", dataSnapshot[data].email);
-                    console.log("NUMBER: ", dataSnapshot[data].ld_number);
-                    console.log("NAME: ", dataSnapshot[data].username);
 
-                    if (dataSnapshot[data].email.indexOf(email) !== -1 || dataSnapshot[data].ld_number.indexOf(ld_number) !== -1) {
-                        console.log("exisiting data");
-                        alert("You already have an exisiting ld account");
-                    } else {
-                        writeUserData(username, email, ld_number);
+                    if (dataSnapshot[data].username.indexOf(username) !== -1) {
+                        userFlag = false;
+                    } else if (dataSnapshot[data].email.indexOf(email) !== -1 ) {
+                        emailFlag = false;
+                    } else if (dataSnapshot[data].ld_number.indexOf(ld_number) !== -1) {
+                        numberFlag = false;
                     }
                 }
+
+                if (userFlag === true && emailFlag === true && numberFlag === true) {
+                    writeUserData(username, email, ld_number);
+                } else {
+                    // console.log("FAIL");
+                }
             } else {
-                console.log("no data");
+                // console.log("no data");
             }
         }).catch((error) => {
             console.error(error);
@@ -74,33 +78,42 @@ const Form = () => {
 
         if (nameData.length === 0 || emailData.length === 0 || ldNumberData === 0) {
             console.error("empty field");
+
         } else {
             document.getElementById("name-input").value = "";
             document.getElementById("email-input").value = "";
             document.getElementById("ld-number-input").value = "";
 
             readUserData(emailData, ldNumberData, nameData);
-            // writeUserData(nameData, emailData, ldNumberData);
         }
     }
 
     return (
         <React.Fragment>
-            <form id = "LD-form" 
-                onSubmit={() => {handleSubmit()}}>
+            <form id = "LD-form" onSubmit={(e) => {
+                handleSubmit(e);
+                e.preventDefault();
+            }}>
                 <label htmlFor = "name"> Name </label>
                 <input required type = "text" id = "name-input" name = "name" onChange={(e) => setNameData(e.target.value)}/>
                 <br />
 
                 <label htmlFor = "ld-number"> Ld number </label>
                 <input required placeholder="Any number 200 - 1000" type="number" id="ld-number-input" name="ld-number" 
+                    onChange={(e) => setLdNumberData(e.target.value)}
                     onKeyDown={(e) => {
                         if (e.target.value.length >= 4) {
                             console.log("too big");
-                            e.target.value = e.target.value.substring(0, 3);
+                            e.target.value = e.target.value.substring(0, 4);
+                        }
+
+                        if (parseInt(ldNumberData) < 20 || parseInt(ldNumberData) > 1000){
+                            console.log("ld number too low or too high");
+                            document.getElementById("ld-number-input").style.borderBottom = "2px solid #ff0000";
+                        } else {
+                            document.getElementById("ld-number-input").style.borderBottom = "2px solid #000"; 
                         }
                     }}
-                    onChange={(e) => setLdNumberData(e.target.value)}
                 />
                 <br />
 
