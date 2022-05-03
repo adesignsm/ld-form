@@ -1,10 +1,110 @@
+@font-face {
+  font-family: "Gecko Lunch";
+  src: url("Gecko_Lunch.ttf");
+}
+
+@font-face {
+  font-family: "Ramdone";
+  src: url("Ramdone_DEMO.ttf");
+  unicode-range: U+30-39;
+}
+
+#LD-form {
+  margin-top: 40px;
+  text-align: center;
+}
+
+input[type=text] {
+  width: 80%;
+}
+
+input[type=number] {
+  font-family: "Ramdone";
+}
+
+input[type=number]::-webkit-input-placeholder {
+  font-size: 30px;
+}
+
+input[type=number]:-ms-input-placeholder {
+  font-size: 30px;
+}
+
+input[type=number]::-ms-input-placeholder {
+  font-size: 30px;
+}
+
+input[type=number]::placeholder {
+  font-size: 30px;
+}
+
 input[type=text], input[type=number], input[type=email] {
   background: transparent;
   border: none;
-  border-bottom: 2px solid #000;
+  width: 90%;
+  font-size: 10vw;
+  font-weight: thin;
+  line-height: 50px;
+  text-transform: uppercase;
+  color: #fff;
+  caret-color: #39D077;
+  border: 3px solid #fff;
+  text-align: center;
+  padding-left: 10px;
+  text-shadow: -4px -1px 0 #39D077, 1px -1px 0 #39D077, -1px 1px 0 #39D077, 1px 1px 0 #39D077;
+}
+
+input[type=text]::-webkit-input-placeholder, input[type=number]::-webkit-input-placeholder, input[type=email]::-webkit-input-placeholder {
+  font-size: 30px;
+  color: #d3d3dd;
+  text-shadow: none;
+}
+
+input[type=text]:-ms-input-placeholder, input[type=number]:-ms-input-placeholder, input[type=email]:-ms-input-placeholder {
+  font-size: 30px;
+  color: #d3d3dd;
+  text-shadow: none;
+}
+
+input[type=text]::-ms-input-placeholder, input[type=number]::-ms-input-placeholder, input[type=email]::-ms-input-placeholder {
+  font-size: 30px;
+  color: #d3d3dd;
+  text-shadow: none;
+}
+
+input[type=text]::placeholder, input[type=number]::placeholder, input[type=email]::placeholder {
+  font-size: 30px;
+  color: #d3d3dd;
+  text-shadow: none;
+}
+
+input:focus {
+  outline: none !important;
+  border: 3px solid #39D077;
+  border-radius: 10px;
+}
+
+label {
+  font-size: 40px;
+  line-height: 50px;
+  color: #f7fc9f;
+  text-shadow: -1px -1px 0 #A0CBF3, 1px -1px 0 #A0CBF3, -1px 1px 0 #A0CBF3, 1px 1px 0 #A0CBF3;
 }
 
 #submit-button {
-  margin-top: 20px;
+  margin-top: 40px;
+  margin-left: -100px;
+  margin-right: -100px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  width: 550px;
+  height: 120px;
+  font-size: 70px;
+  background-color: #FA6C1C;
+}
+
+label, h1, button, input {
+  font-family: "Gecko Lunch";
 }
 /*# sourceMappingURL=form.css.map */

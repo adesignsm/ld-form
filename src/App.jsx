@@ -7,7 +7,6 @@ const App = () => {
 
     return (
         <div id = "wrapper">
-            <h1> Test LD_FORM </h1>
             <Form />
         </div>
     )

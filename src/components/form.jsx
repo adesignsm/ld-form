@@ -55,6 +55,7 @@ const Form = () => {
                     writeUserData(username, email, ld_number);
                 } else {
                     // console.log("FAIL");
+                    alert("You have already submitted your Life design information");
                 }
             } else {
                 // console.log("no data");
@@ -77,7 +78,15 @@ const Form = () => {
     const handleSubmit = () => {
 
         if (nameData.length === 0 || emailData.length === 0 || ldNumberData === 0) {
-            console.error("empty field");
+            // console.error("empty field");
+
+            if (emailData.indexOf("@") === -1) {
+                document.getElementById("submit-button").style.opacity = "0.5";
+
+                setTimeout(() => {
+                    document.getElementById("submit-button").style.opacity = "1";
+                }, 2000);
+            }
 
         } else {
             document.getElementById("name-input").value = "";
@@ -85,6 +94,12 @@ const Form = () => {
             document.getElementById("ld-number-input").value = "";
 
             readUserData(emailData, ldNumberData, nameData);
+
+            document.getElementById("submit-button").style.backgroundColor = "#39D077";
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
         }
     }
 
@@ -94,34 +109,46 @@ const Form = () => {
                 handleSubmit(e);
                 e.preventDefault();
             }}>
-                <label htmlFor = "name"> Name </label>
-                <input required type = "text" id = "name-input" name = "name" onChange={(e) => setNameData(e.target.value)}/>
-                <br />
+                <label htmlFor = "name" onClick={() => {document.getElementById("name-input").focus({preventScroll: true})}}> MY NAME IS </label>
+                <input autoComplete = "off" required type = "text" id = "name-input" name = "name" 
+                onChange={(e) => setNameData(e.target.value)}
+                />
+                {/* <br /> */}
 
-                <label htmlFor = "ld-number"> Ld number </label>
-                <input required placeholder="Any number 200 - 1000" type="number" id="ld-number-input" name="ld-number" 
+                <label htmlFor = "ld-number" onClick={() => {document.getElementById("ld-number-input").focus({preventScroll: true})}}> LD NUMBER: </label>
+                <input autoComplete = "off" required type="number" id="ld-number-input" name="ld-number" 
                     onChange={(e) => setLdNumberData(e.target.value)}
                     onKeyDown={(e) => {
                         if (e.target.value.length >= 4) {
                             console.log("too big");
-                            e.target.value = e.target.value.substring(0, 4);
+                            e.target.value = e.target.value.substring(0, 3);
                         }
 
-                        if (parseInt(ldNumberData) < 20 || parseInt(ldNumberData) > 1000){
-                            console.log("ld number too low or too high");
-                            document.getElementById("ld-number-input").style.borderBottom = "2px solid #ff0000";
+                        if (parseInt(ldNumberData) < 20){
+                            console.log("ld number too low");
+                            document.getElementById("ld-number-input").style.border = "3px solid #ff0000";
+                            document.getElementById("ld-number-input").style.borderRadius = "10px";
+
+                            if (ldNumberData.length >= 2 && parseInt(ldNumberData) < 20) {
+                                if (e.key !== "Backspace") alert("Number must be above 200!");
+                            } 
                         } else {
-                            document.getElementById("ld-number-input").style.borderBottom = "2px solid #000"; 
+                            document.getElementById("ld-number-input").style.border = "3px solid #fff"; 
+                            document.getElementById("ld-number-input").style.borderRadius = "10px";
                         }
                     }}
                 />
-                <br />
+                {/* <br /> */}
 
-                <label htmlFor = "email"> Email </label>
-                <input required type = "email" id = "email-input" name = "email" onChange={(e) => setEmailData(e.target.value)}/>
-                <br />
-
-                <input type = "submit" id = "submit-button" onMouseDown={() => handleSubmit()} /> 
+                <label htmlFor = "email" onClick={() => {document.getElementById("email-input").focus({preventScroll: true})}}> UUUU CAN EMAIL ME AT </label>
+                <input autoComplete = "off" required type = "email" id = "email-input" name = "email" onChange={(e) => setEmailData(e.target.value)}/>
+                <label>, REPORTING FOR DUTY </label>
+                {/* <br /> */}
+            
+                <input type = "submit" id = "submit-button" 
+                    onMouseDown={() => handleSubmit()} 
+                    onMouseEnter={() => handleSubmit()}
+                /> 
             </form>
         </React.Fragment>
     )
