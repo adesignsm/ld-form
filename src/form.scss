@@ -27,7 +27,11 @@ input[type=number] {
 }
 
 input[type=text], input[type=number], input[type=email] {
-    background: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    
+    background-color: #fff;
     border: none;
     box-shadow: none;
     width: 90%;
