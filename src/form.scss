@@ -30,7 +30,7 @@ input[type=text], input[type=number], input[type=email] {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    
+
     background-color: #fff;
     border: none;
     box-shadow: none;
@@ -75,6 +75,10 @@ label {
 }
 
 #submit-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    
     margin-top: 40px;
     margin-left: -100px;
     margin-right: -100px;
