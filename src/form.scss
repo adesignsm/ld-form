@@ -78,7 +78,7 @@ label {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    
+
     margin-top: 40px;
     margin-left: -100px;
     margin-right: -100px;
@@ -94,4 +94,9 @@ label {
 
 label, h1, button, input {
     font-family: "Gecko Lunch";
+}
+
+//desktop
+@media only screen and (min-width: 768px){
+
 }
