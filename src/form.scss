@@ -65,6 +65,7 @@ label {
     font-size: 40px;
     line-height: 50px;
     color: #f7fc9f;
+    box-shadow: none;
     text-shadow: -1px -1px 0 #A0CBF3, 1px -1px 0 #A0CBF3, -1px 1px 0 #A0CBF3, 1px 1px 0 #A0CBF3; 
 }
 
@@ -73,7 +74,7 @@ label {
     margin-left: -100px;
     margin-right: -100px;
     border: none;
-    background: transparent;
+    background-color: transparent;
     color: #fff;
     width: 550px;
     height: 120px;
