@@ -5,6 +5,7 @@ import {getAnalytics} from "firebase/analytics";
 import {get, getDatabase, ref, set, child} from "firebase/database";
 
 import "../form.css";
+import LD_LOGO from "../media/LD_FLOWER.png";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAJDQNNmSpwplbJfN8vWTFP5gXbIpHNeOA",
@@ -21,7 +22,8 @@ const analytics = getAnalytics(app);
 
 let userFlag = true,
     emailFlag = true,
-    numberFlag = true;
+    numberFlag = true,
+    writeToFirebase = false;
 
 const Form = () => {
 
@@ -42,9 +44,9 @@ const Form = () => {
 
                 for (const data in dataSnapshot) {
 
-                    if (dataSnapshot[data].username.indexOf(username) !== -1) {
+                    if (dataSnapshot[data].username.indexOf(username.toLowerCase()) !== -1) {
                         userFlag = false;
-                    } else if (dataSnapshot[data].email.indexOf(email) !== -1 ) {
+                    } else if (dataSnapshot[data].email.indexOf(email.toLowerCase()) !== -1 ) {
                         emailFlag = false;
                     } else if (dataSnapshot[data].ld_number.indexOf(ld_number) !== -1) {
                         numberFlag = false;
@@ -53,9 +55,17 @@ const Form = () => {
 
                 if (userFlag === true && emailFlag === true && numberFlag === true) {
                     writeUserData(username, email, ld_number);
+
+                    if (writeToFirebase === true) {
+                        document.getElementById("server-status").innerHTML = "Your life design info has been stored succesfully!";
+                        document.getElementById("submit-button").style.backgroundColor = "#39D077";
+                    } 
                 } else {
                     // console.log("FAIL");
-                    alert("You have already submitted your Life design information");
+                    let form = document.getElementById("LD-form");
+                    form.addEventListener("submit", (e) => {e.preventDefault()});
+                    document.getElementById("server-status").innerHTML = "Your Life design account has already been submitted";
+                    document.getElementById("submit-button").style.backgroundColor = "#ff0000";
                 }
             } else {
                 // console.log("no data");
@@ -69,11 +79,42 @@ const Form = () => {
         const db = getDatabase();
 
         set(ref(db, "users/" + name), {
-            username: name,
+            username: name.toLowerCase(),
             ld_number: number,
-            email: email
+            email: email.toLowerCase()
         });
+
+        writeToFirebase = true;
     }
+
+    const convertToLower = (e, input) => {
+        for (var i = 0; i < e.target.value.length; i++) {
+            if (e.target.value.charAt(i)) {
+                let str = e.target.value.toUpperCase();
+                console.log(str);
+
+                if (str.charAt(i) === "I") {
+                    let newLetter = str.charAt(i).toLowerCase();
+                    for (var x = 0; x < str.length; x++) {
+                        if (str.charAt(x) === "I")  {
+                            let newStr = str.replace(/I/g, newLetter);
+                            input.value = newStr;
+                        }
+                        
+                    }
+                }
+            }
+        }
+    }
+
+    //SCREEN CAPTURE SCRIPT
+    // const screenCapture = () => {
+    //     let test = document.getElementById("LD-form");
+
+    //     html2canvas(test).then((canvas) => {
+    //         document.getElementById("test-capture").appendChild(canvas);
+    //     });
+    // }
 
     const handleSubmit = () => {
 
@@ -95,8 +136,6 @@ const Form = () => {
 
             readUserData(emailData, ldNumberData, nameData);
 
-            document.getElementById("submit-button").style.backgroundColor = "#39D077";
-
             setTimeout(() => {
                 window.location.reload();
             }, 1500);
@@ -105,19 +144,27 @@ const Form = () => {
 
     return (
         <React.Fragment>
-            <form id = "LD-form" onSubmit={(e) => {
+            <div id = "test-capture"></div>
+            <header> <img className = "rotate" id = "LD-LOGO" src = {LD_LOGO}/> </header>
+            <form id = "LD-form" 
+            onSubmit={(e) => {
                 handleSubmit(e);
                 e.preventDefault();
-            }}>
-                <label htmlFor = "name" onClick={() => {document.getElementById("name-input").focus({preventScroll: true})}}> MY NAME IS </label>
+            }}
+            >
+                <div id = "form-container">
+                <label htmlFor = "name" onClick={() => {document.getElementById("name-input").focus({preventScroll: true})}}> MY NAME iS: </label>
                 <input autoComplete = "off" required type = "text" id = "name-input" name = "name" 
-                onChange={(e) => setNameData(e.target.value)}
+                onChange={(e) => {
+                    setNameData(e.target.value);
+                    convertToLower(e, document.getElementById("name-input"));
+                }}
                 />
                 {/* <br /> */}
 
                 <label htmlFor = "ld-number" onClick={() => {document.getElementById("ld-number-input").focus({preventScroll: true})}}> LD NUMBER: </label>
                 <input autoComplete = "off" required type="number" id="ld-number-input" name="ld-number" 
-                    onChange={(e) => setLdNumberData(e.target.value)}
+                    onChange={(e) => {setLdNumberData(e.target.value)}}
                     onKeyDown={(e) => {
                         if (e.target.value.length >= 4) {
                             console.log("too big");
@@ -140,15 +187,20 @@ const Form = () => {
                 />
                 {/* <br /> */}
 
-                <label htmlFor = "email" onClick={() => {document.getElementById("email-input").focus({preventScroll: true})}}> UUUU CAN EMAIL ME AT </label>
-                <input autoComplete = "off" required type = "email" id = "email-input" name = "email" onChange={(e) => setEmailData(e.target.value)}/>
-                <label>, REPORTING FOR DUTY </label>
-                {/* <br /> */}
+                <label htmlFor = "email" onClick={() => {document.getElementById("email-input").focus({preventScroll: true})}}> UUUU CAN EMAiL ME AT: </label>
+                <input autoComplete = "off" required type = "email" id = "email-input" name = "email" onChange={(e) => {
+                    setEmailData(e.target.value);
+                    convertToLower(e, document.getElementById("email-input"));
+                }}
+                />
+
+                <h3 id = "server-status"></h3>
             
                 <input type = "submit" id = "submit-button" 
                     onMouseDown={() => handleSubmit()} 
                     onMouseEnter={() => handleSubmit()}
                 /> 
+                </div>
             </form>
         </React.Fragment>
     )

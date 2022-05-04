@@ -9,8 +9,24 @@
     unicode-range: U+30-39;
 }
 
+.rotate {
+    animation: rotation 8s infinite linear;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(359deg);
+    }
+}
+
 #LD-form {
-    margin-top: 40px;
+    // position: relative;
+    // z-index: 999;
+    margin-top: 30px;
     text-align: center;
 }
 
@@ -31,27 +47,23 @@ input[type=text], input[type=number], input[type=email] {
     -moz-appearance: none;
     appearance: none;
 
-    background-color: #fff;
+    font-weight: bolder;
     border: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
     box-shadow: none;
     width: 90%;
     font-size: 10vw;
     font-weight: thin;
     line-height: 50px;
-    text-transform: uppercase;
-    color: #fff;
-    caret-color: #39D077;
-    border: 3px solid #fff;
+    
+    color: #87ceeb;
+    caret-color: #87ceeb;
+    border: 3px solid transparent;
     text-align: center;
     padding-left: 10px;
-    text-shadow: -4px -1px 0 #39D077, 1px -1px 0 #39D077, -1px 1px 0 #39D077, 1px 1px 0 #39D077;
-
-    // &::placeholder {
-    //     font-size: 30px;
-    //     line-height: 50px;
-    //     color: #f7fc9f;
-    //     text-shadow: -1px -1px 0 #A0CBF3, 1px -1px 0 #A0CBF3, -1px 1px 0 #A0CBF3, 1px 1px 0 #A0CBF3;
-    // }
+    background-color: transparent;
+    // text-shadow: -10px -1px 0 #39D077, 10px -1px 0 #39D077, -10px 1px 0 #39D077, 10px 1px 0 #39D077;
 
     &::placeholder {
         font-size: 30px;
@@ -62,7 +74,7 @@ input[type=text], input[type=number], input[type=email] {
 
 input:focus {
     outline: none !important;
-    border: 3px solid #39D077;
+    border: 3px solid #87ceeb;
     border-radius: 10px;
 }
 
@@ -71,7 +83,11 @@ label {
     line-height: 50px;
     color: #f7fc9f;
     box-shadow: none;
-    text-shadow: -1px -1px 0 #A0CBF3, 1px -1px 0 #A0CBF3, -1px 1px 0 #A0CBF3, 1px 1px 0 #A0CBF3; 
+    text-shadow: -1px -1px 0 #87ceeb, 1px -1px 0 #87ceeb, -1px 1px 0 #87ceeb, 1px 1px 0 #87ceeb; 
+
+    &:nth-child(1) {
+        word-spacing: 6px;
+    }
 }
 
 #submit-button {
@@ -79,13 +95,16 @@ label {
     -moz-appearance: none;
     appearance: none;
 
-    margin-top: 40px;
-    margin-left: -100px;
-    margin-right: -100px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    // margin-left: -100px;
+    // margin-right: -100px;
     border: none;
     background-color: transparent;
     color: #fff;
-    width: 550px;
+    width: 100%;
     height: 120px;
     font-size: 70px;
     background-color: #FA6C1C;
@@ -96,7 +115,98 @@ label, h1, button, input {
     font-family: "Gecko Lunch";
 }
 
-//desktop
-@media only screen and (min-width: 768px){
+#server-status {
+    font-family: "Gecko Lunch";
+}
 
+//mobile
+@media only screen and (min-width: 200px) and (max-width: 500px) {
+    input[type=text], input[type=number], input[type=email] {
+        margin-top: -50px;
+        font-size: 20vw;
+    }
+
+    header {
+        position: fixed;
+        top: 0;
+
+        img {
+            width: 40%;
+            margin-top: -20px;
+            margin-right: -35px;
+            float: right;
+            background-color: transparent;
+        }
+    }
+
+    #LD-form {
+        z-index: 999;
+        overflow-y: scroll;
+        margin-top: 120px;
+    }
+}
+
+//tablet
+@media only screen and (min-width: 501px) and (max-width: 1180px) {
+    input[type=text], input[type=number], input[type=email] {
+        margin-top: -50px;
+        font-size: 20vw;
+    }
+
+    header {
+        position: fixed;
+        top: 0;
+
+        img {
+            margin-top: -25px;
+            margin-right: -40px;
+            width: 35%;
+            float: right;
+        }
+    }
+
+    label {
+        font-size: 7vw;
+        line-height: 90px;
+    }
+
+    #LD-form {
+        z-index: 999;
+        overflow-y: scroll;
+        margin-top: 170px;
+    }
+}
+
+//desktop
+@media only screen and (min-width: 1181px){
+    input[type=text], input[type=number], input[type=email] {
+        margin-top: -100px;
+        font-size: 15vw;
+    }
+
+    header {
+        position: fixed;
+        top: 0;
+
+        img {
+            margin-top: -70px;
+            margin-right: -60px;
+            width: 25%;
+            float: right;
+        }
+    }
+
+    #form-container {
+        padding-bottom: 200px;
+    }
+
+    label {
+        font-size: 8vw;
+        line-height: 150px;
+    }
+
+    #LD-form {
+        overflow-y: scroll;
+        margin-top: 100px;
+    }
 }
