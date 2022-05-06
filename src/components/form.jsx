@@ -88,20 +88,38 @@ const Form = () => {
     }
 
     const convertToLower = (e, input) => {
-        for (var i = 0; i < e.target.value.length; i++) {
-            if (e.target.value.charAt(i)) {
-                let str = e.target.value.toUpperCase();
-                console.log(str);
+        // for (var i = 0; i < e.target.value.length; i++) {
+        //     if (e.target.value.charAt(i)) {
+        //         let str = e.target.value.toUpperCase();
+        //         console.log(str);
 
-                if (str.charAt(i) === "I") {
-                    let newLetter = str.charAt(i).toLowerCase();
-                    for (var x = 0; x < str.length; x++) {
-                        if (str.charAt(x) === "I")  {
-                            let newStr = str.replace(/I/g, newLetter);
-                            input.value = newStr;
-                        }
-                        
-                    }
+        //         if (str.charAt(i) === "I") {
+        //             let newLetter = str.charAt(i).toLowerCase();
+        //             for (var x = 0; x < str.length; x++) {
+        //                 if (str.charAt(x) === "I")  {
+        //                     let newStr = str.replace(/I/g, newLetter);
+        //                     input.value = newStr;
+        //                 }   
+        //             }
+        //         }
+        //     }
+        // }
+
+        console.log(input.value);
+        let str = input.value;
+        let char = "";
+
+        for (let i = 0; i < str.length; i++) {
+            char = str.charAt(i);
+            console.log(char * 1);
+            if (!isNaN(char * 1)) {
+                console.log("integer");
+            } else {
+                if (char == char.toUpperCase() && char === "I" || char === "i") {
+                    input.value = input.value.replace(/I/g, "i");
+                }else if (char == char.toLowerCase() && char !== "I") {
+                    let newChar = char.toUpperCase();
+                    input.value = input.value.replace(char, newChar);
                 }
             }
         }
