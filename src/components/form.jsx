@@ -25,6 +25,7 @@ let userFlag = true,
     emailFlag = true,
     numberFlag = true,
     writeToFirebase = false,
+    serverStatus = "",
     click = 0,
     base64Img
 
@@ -55,10 +56,13 @@ const Form = () => {
 
                     if (dataSnapshot[data].username.indexOf(username.toLowerCase()) !== -1) {
                         userFlag = false;
+                        serverStatus = "name already exists";
                     } else if (dataSnapshot[data].email.indexOf(email.toLowerCase()) !== -1 ) {
                         emailFlag = false;
+                        serverStatus = "email already exists"
                     } else if (dataSnapshot[data].ld_number.indexOf(ld_number) !== -1) {
                         numberFlag = false;
+                        serverStatus = "number already exists";
                     }
                 }
 
@@ -71,7 +75,8 @@ const Form = () => {
                     } 
                 } else {
                     // console.log("FAIL");
-                    document.getElementById("server-status").innerHTML = "One or more of the entires already exist.";
+                    alert(serverStatus);
+                    document.getElementById("server-status").innerHTML = "";
                     document.getElementById("submit-button").style.backgroundColor = "#ff0000";
                 }
             } else {
@@ -159,16 +164,18 @@ const Form = () => {
     
     const handleSubmit = (e) => {
 
-        if (nameData.length === 0 || emailData.length === 0 || ldNumberData === 0) {
+        if (nameData.length === 0 
+            || emailData.length === 0 
+            || ldNumberData === 0 
+            || emailData.indexOf("@") === -1 ) {
             // console.error("empty field");
+            document.getElementById("submit-button").style.opacity = "0.5";
 
-            if (emailData.indexOf("@") === -1) {
-                document.getElementById("submit-button").style.opacity = "0.5";
-
-                setTimeout(() => {
-                    document.getElementById("submit-button").style.opacity = "1";
-                }, 2000);
-            }
+            setTimeout(() => {
+                document.getElementById("submit-button").style.opacity = "1";
+                alert("you have not filled all the inputs");
+                window.location.reload();
+            }, 2000);
 
         } else {
             document.getElementById("name-input").value = "";
@@ -207,22 +214,33 @@ const Form = () => {
                         <label htmlFor = "ld-number" onClick={() => {document.getElementById("ld-number-input").focus({preventScroll: true})}}> LD NUMBER: </label>
                         <h1 id = "number-capture"></h1>
                         <input class = "capture-content" autoComplete = "off" required type="number" id="ld-number-input" name="ld-number" 
+                            onWheel={(e) => e.target.blur()}
                             onChange={(e) => {setLdNumberData(e.target.value)}}
+                            onBlur = {(e) => {
+                                if (e.target.value.length > 1 && e.target.value < 200) {
+                                    numberFlag = false;
+                                    alert("Number must be above 200");
+                                }
+                            }}
                             onKeyDown={(e) => {
+                                console.log(e.target.id);
+                                console.log(document.activeElement.id);
                                 convertToLower(document.getElementById("ld-number-input"));
                                 if (e.target.value.length >= 4) {
-                                    console.log("too big");
                                     e.target.value = e.target.value.substring(0, 3);
                                 }
 
-                                if (parseInt(ldNumberData) < 20){
-                                    console.log("ld number too low");
+                                if (Number(ldNumberData) < 200){
                                     document.getElementById("ld-number-input").style.border = "3px solid #ff0000";
                                     document.getElementById("ld-number-input").style.borderRadius = "10px";
 
-                                    if (ldNumberData.length >= 2 && parseInt(ldNumberData) < 20) {
-                                        if (e.key !== "Backspace") alert("Number must be above 200!");
-                                    } 
+                                    if (ldNumberData.length > 2 && e.target.value < 200 && e.key !== "Backspace") {
+                                        numberFlag = false;
+                                        e.preventDefault();
+                                        alert("Number must be above 200!");
+                                    } else {
+                                        numberFlag = true;
+                                    }
                                 } else {
                                     document.getElementById("ld-number-input").style.border = "3px solid #fff"; 
                                     document.getElementById("ld-number-input").style.borderRadius = "10px";
@@ -245,7 +263,15 @@ const Form = () => {
                                 document.getElementById("ld-number-input").style.opacity = "0";
                                 document.getElementById("number-capture").style.opacity = "1";
 
-                                handleSubmit();
+                                if (numberFlag === false) {
+                                    console.log("invalid");
+                                    alert("number is not greater than 200");
+                                    window.location.reload();
+                                } else {
+                                    console.log("hit");
+                                    handleSubmit();
+                                }
+                                
                             }
                         }}
                         />
