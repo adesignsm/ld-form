@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import html2canvas from "html2canvas";
 
 import {initializeApp} from "firebase/app";
 import {getAnalytics} from "firebase/analytics";
@@ -23,13 +24,16 @@ const analytics = getAnalytics(app);
 let userFlag = true,
     emailFlag = true,
     numberFlag = true,
-    writeToFirebase = false;
+    writeToFirebase = false,
+    click = 0,
+    base64Img
 
 const Form = () => {
 
     const [nameData, setNameData] = useState("");
     const [ldNumberData, setLdNumberData] = useState("");
     const [emailData, setEmailData] = useState("");
+    const [screenShotData, setScreenShotData] = useState("");
 
     useEffect(() => {
         return;
@@ -38,7 +42,7 @@ const Form = () => {
     const readUserData = (email, ld_number, username) => {
         const dbRef = ref(getDatabase());
 
-        get(child(dbRef, `users/`)).then((snapshot) => {
+        get(child(dbRef, "users/")).then((snapshot) => {
             if (snapshot.exists()) {
                 const dataSnapshot = snapshot.val();
 
@@ -64,11 +68,11 @@ const Form = () => {
                     // console.log("FAIL");
                     let form = document.getElementById("LD-form");
                     form.addEventListener("submit", (e) => {e.preventDefault()});
-                    document.getElementById("server-status").innerHTML = "Your Life design account has already been submitted";
+                    document.getElementById("server-status").innerHTML = "One or more of the entires already exist.";
                     document.getElementById("submit-button").style.backgroundColor = "#ff0000";
                 }
             } else {
-                // console.log("no data");
+                writeUserData(username, email, ld_number);
             }
         }).catch((error) => {
             console.error(error);
@@ -81,30 +85,22 @@ const Form = () => {
         set(ref(db, "users/" + name), {
             username: name.toLowerCase(),
             ld_number: number,
-            email: email.toLowerCase()
+            email: email.toLowerCase(),
         });
 
         writeToFirebase = true;
     }
 
-    const convertToLower = (e, input) => {
-        // for (var i = 0; i < e.target.value.length; i++) {
-        //     if (e.target.value.charAt(i)) {
-        //         let str = e.target.value.toUpperCase();
-        //         console.log(str);
+    const writeScreenShotData = (name, base64Img) => {
+        const db = getDatabase();
 
-        //         if (str.charAt(i) === "I") {
-        //             let newLetter = str.charAt(i).toLowerCase();
-        //             for (var x = 0; x < str.length; x++) {
-        //                 if (str.charAt(x) === "I")  {
-        //                     let newStr = str.replace(/I/g, newLetter);
-        //                     input.value = newStr;
-        //                 }   
-        //             }
-        //         }
-        //     }
-        // }
+        set(ref(db, "screenshots/" + name), {
+           name: name,
+           baseURI:  base64Img
+        });
+    }
 
+    const convertToLower = (input) => {
         console.log(input.value);
         let str = input.value;
         let char = "";
@@ -117,24 +113,45 @@ const Form = () => {
             } else {
                 if (char == char.toUpperCase() && char === "I" || char === "i") {
                     input.value = input.value.replace(/I/g, "i");
-                }else if (char == char.toLowerCase() && char !== "I") {
+                } else if (char == char.toLowerCase() && char !== "I") {
                     let newChar = char.toUpperCase();
                     input.value = input.value.replace(char, newChar);
                 }
             }
         }
+
+        if (input.id === "name-input") document.getElementById("name-capture").innerHTML = input.value;
+        if (input.id === "ld-number-input") document.getElementById("number-capture").innerHTML = input.value;
     }
 
     //SCREEN CAPTURE SCRIPT
-    // const screenCapture = () => {
-    //     let test = document.getElementById("LD-form");
+    const screenCapture = () => {
+        let LD_FORM = document.querySelector("body");
+        
+        html2canvas(LD_FORM, {
+            useCORS: true,
+            letterRendering: true,
+            allowTaint: false,
+            width: LD_FORM.height,
+            height: LD_FORM.width
 
-    //     html2canvas(test).then((canvas) => {
-    //         document.getElementById("test-capture").appendChild(canvas);
-    //     });
-    // }
+        }).then((canvas) => {
+            let base64Img = canvas.toDataURL("image/png");
 
-    const handleSubmit = () => {
+            let screenshot = new Image();
+            screenshot.setAttribute("src", base64Img);
+            console.log(screenshot.src);
+            
+            setScreenShotData(screenshot.src);
+            console.log(screenShotData);
+
+            // document.body.appendChild(screenshot);
+
+            writeScreenShotData(nameData, base64Img);
+        })
+    }
+    
+    const handleSubmit = (e) => {
 
         if (nameData.length === 0 || emailData.length === 0 || ldNumberData === 0) {
             // console.error("empty field");
@@ -162,64 +179,102 @@ const Form = () => {
 
     return (
         <React.Fragment>
-            <div id = "test-capture"></div>
             <header> <img className = "rotate" id = "LD-LOGO" src = {LD_LOGO}/> </header>
-            <form id = "LD-form" 
-            onSubmit={(e) => {
-                handleSubmit(e);
-                e.preventDefault();
-            }}
-            >
-                <div id = "form-container">
-                <label htmlFor = "name" onClick={() => {document.getElementById("name-input").focus({preventScroll: true})}}> MY NAME iS: </label>
-                <input autoComplete = "off" required type = "text" id = "name-input" name = "name" 
-                onChange={(e) => {
-                    setNameData(e.target.value);
-                    convertToLower(e, document.getElementById("name-input"));
+            <div id = "capture-container">
+                <form id = "LD-form" 
+                onSubmit={(e) => {
+                    handleSubmit(e);
+                    e.preventDefault();
                 }}
-                />
-                {/* <br /> */}
+                >
+                    <div id = "form-container">
+                        <label htmlFor = "name" onClick={() => {document.getElementById("name-input").focus({preventScroll: true})}}> MY NAME iS: </label>
+                        <h1 id ="name-capture"></h1>
+                        <input class = "capture-content" autoComplete = "off" required type = "text" id = "name-input" name = "name" 
+                        onChange={(e) => {
+                            setNameData(e.target.value);
+                            convertToLower(document.getElementById("name-input"));
+                        }}
+                        ></input>
+                        {/* <br /> */}
 
-                <label htmlFor = "ld-number" onClick={() => {document.getElementById("ld-number-input").focus({preventScroll: true})}}> LD NUMBER: </label>
-                <input autoComplete = "off" required type="number" id="ld-number-input" name="ld-number" 
-                    onChange={(e) => {setLdNumberData(e.target.value)}}
-                    onKeyDown={(e) => {
-                        if (e.target.value.length >= 4) {
-                            console.log("too big");
-                            e.target.value = e.target.value.substring(0, 3);
-                        }
+                        <label htmlFor = "ld-number" onClick={() => {document.getElementById("ld-number-input").focus({preventScroll: true})}}> LD NUMBER: </label>
+                        <h1 id = "number-capture"></h1>
+                        <input class = "capture-content" autoComplete = "off" required type="number" id="ld-number-input" name="ld-number" 
+                            onChange={(e) => {setLdNumberData(e.target.value)}}
+                            onKeyDown={(e) => {
+                                convertToLower(document.getElementById("ld-number-input"));
+                                if (e.target.value.length >= 4) {
+                                    console.log("too big");
+                                    e.target.value = e.target.value.substring(0, 3);
+                                }
 
-                        if (parseInt(ldNumberData) < 20){
-                            console.log("ld number too low");
-                            document.getElementById("ld-number-input").style.border = "3px solid #ff0000";
-                            document.getElementById("ld-number-input").style.borderRadius = "10px";
+                                if (parseInt(ldNumberData) < 20){
+                                    console.log("ld number too low");
+                                    document.getElementById("ld-number-input").style.border = "3px solid #ff0000";
+                                    document.getElementById("ld-number-input").style.borderRadius = "10px";
 
-                            if (ldNumberData.length >= 2 && parseInt(ldNumberData) < 20) {
-                                if (e.key !== "Backspace") alert("Number must be above 200!");
-                            } 
-                        } else {
-                            document.getElementById("ld-number-input").style.border = "3px solid #fff"; 
-                            document.getElementById("ld-number-input").style.borderRadius = "10px";
-                        }
-                    }}
-                />
-                {/* <br /> */}
+                                    if (ldNumberData.length >= 2 && parseInt(ldNumberData) < 20) {
+                                        if (e.key !== "Backspace") alert("Number must be above 200!");
+                                    } 
+                                } else {
+                                    document.getElementById("ld-number-input").style.border = "3px solid #fff"; 
+                                    document.getElementById("ld-number-input").style.borderRadius = "10px";
+                                }
+                            }}
+                        />
+                        {/* <br /> */}
 
-                <label htmlFor = "email" onClick={() => {document.getElementById("email-input").focus({preventScroll: true})}}> UUUU CAN EMAiL ME AT: </label>
-                <input autoComplete = "off" required type = "email" id = "email-input" name = "email" onChange={(e) => {
-                    setEmailData(e.target.value);
-                    convertToLower(e, document.getElementById("email-input"));
+                        <label htmlFor = "email" onClick={() => {document.getElementById("email-input").focus({preventScroll: true})}}> UUUU CAN EMAiL ME AT: </label>
+                        <input autoComplete = "off" required type = "email" id = "email-input" name = "email" onChange={(e) => {
+                            setEmailData(e.target.value);
+                            convertToLower(document.getElementById("email-input"));
+                            
+                        }}
+
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                document.getElementById("name-input").style.opacity = "0";
+                                document.getElementById("name-capture").style.opacity = "1";
+                                document.getElementById("ld-number-input").style.opacity = "0";
+                                document.getElementById("number-capture").style.opacity = "1";
+
+                                screenCapture();
+                                handleSubmit();
+                            }
+                        }}
+                        />
+
+                        <h3 id = "server-status"></h3>
+                    
+                        {/* <input type = "submit" id = "submit-button"
+                            onSubmit={() => {
+                                document.getElementById("name-input").style.opacity = "0";
+                                document.getElementById("name-capture").style.opacity = "1";
+                                document.getElementById("ld-number-input").style.opacity = "0";
+                                document.getElementById("number-capture").style.opacity = "1";
+                                
+                                screenCapture();
+                                handleSubmit();
+                            }}
+                        />  */}
+                    </div>
+                </form>
+
+                
+                <button id = "submit-button" onMouseDown={(e) => {
+                    document.getElementById("name-input").style.opacity = "0";
+                    document.getElementById("name-capture").style.opacity = "1";
+                    document.getElementById("ld-number-input").style.opacity = "0";
+                    document.getElementById("number-capture").style.opacity = "1";
+
+                    screenCapture();
+                    handleSubmit();
+
                 }}
-                />
-
-                <h3 id = "server-status"></h3>
-            
-                <input type = "submit" id = "submit-button" 
-                    onMouseDown={() => handleSubmit()} 
-                    onMouseEnter={() => handleSubmit()}
-                /> 
-                </div>
-            </form>
+                
+                > SUBMIT </button>
+            </div>
         </React.Fragment>
     )
 }

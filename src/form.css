@@ -37,12 +37,7 @@
 }
 
 #LD-form {
-  margin-top: 30px;
   text-align: center;
-}
-
-input[type=text] {
-  width: 80%;
 }
 
 input[type=number] {
@@ -65,7 +60,35 @@ input[type=number]::placeholder {
   font-size: 30px;
 }
 
+#number-capture {
+  font-family: "Ramdone";
+  margin-top: -80px;
+}
+
+#name-capture {
+  margin-top: -60px;
+}
+
+#name-capture, #number-capture {
+  position: absolute;
+  z-index: 0;
+  font-size: 20vw;
+  opacity: 0.05;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-weight: bolder;
+  border: none;
+  padding-top: 21px;
+  width: 90%;
+  color: #87ceeb;
+  border: 3px solid transparent;
+  padding-left: 10px;
+}
+
 input[type=text], input[type=number], input[type=email] {
+  position: relative;
+  z-index: 1;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -76,8 +99,6 @@ input[type=text], input[type=number], input[type=email] {
   -webkit-box-shadow: none;
           box-shadow: none;
   width: 90%;
-  font-size: 10vw;
-  font-weight: thin;
   line-height: 50px;
   color: #87ceeb;
   caret-color: #87ceeb;
@@ -157,7 +178,7 @@ label, h1, button, input {
 
 @media only screen and (min-width: 200px) and (max-width: 500px) {
   input[type=text], input[type=number], input[type=email] {
-    margin-top: -50px;
+    margin-top: -100px;
     font-size: 20vw;
   }
   header {
@@ -173,7 +194,6 @@ label, h1, button, input {
   }
   #LD-form {
     z-index: 999;
-    overflow-y: scroll;
     margin-top: 120px;
   }
 }
@@ -202,6 +222,13 @@ label, h1, button, input {
     overflow-y: scroll;
     margin-top: 170px;
   }
+  #number-capture {
+    font-family: "Ramdone";
+    margin-top: -100px;
+  }
+  #name-capture {
+    margin-top: -80px;
+  }
 }
 
 @media only screen and (min-width: 1181px) {
@@ -229,6 +256,13 @@ label, h1, button, input {
   #LD-form {
     overflow-y: scroll;
     margin-top: 100px;
+  }
+  #number-capture {
+    font-family: "Ramdone";
+    margin-top: -170px;
+  }
+  #name-capture {
+    margin-top: -160px;
   }
 }
 /*# sourceMappingURL=form.css.map */
