@@ -43,7 +43,12 @@ const Form = () => {
         const dbRef = ref(getDatabase());
 
         get(child(dbRef, "users/")).then((snapshot) => {
-            if (snapshot.exists()) {
+
+            if (!snapshot.exists()) {
+                console.log("no data");
+                writeUserData(username, email, ld_number);
+
+            } else if (snapshot.exists()) {
                 const dataSnapshot = snapshot.val();
 
                 for (const data in dataSnapshot) {
@@ -59,6 +64,7 @@ const Form = () => {
 
                 if (userFlag === true && emailFlag === true && numberFlag === true) {
                     writeUserData(username, email, ld_number);
+                    console.log(username, email, ld_number);
 
                     if (writeToFirebase === true) {
                         document.getElementById("server-status").innerHTML = "Your life design info has been stored succesfully!";
@@ -89,6 +95,8 @@ const Form = () => {
         });
 
         writeToFirebase = true;
+
+        if (writeToFirebase === true) screenCapture();
     }
 
     const writeScreenShotData = (name, email, base64Img) => {
@@ -240,7 +248,6 @@ const Form = () => {
                                 document.getElementById("ld-number-input").style.opacity = "0";
                                 document.getElementById("number-capture").style.opacity = "1";
 
-                                screenCapture();
                                 handleSubmit();
                             }
                         }}
@@ -269,7 +276,6 @@ const Form = () => {
                     document.getElementById("ld-number-input").style.opacity = "0";
                     document.getElementById("number-capture").style.opacity = "1";
 
-                    screenCapture();
                     handleSubmit();
 
                 }}
