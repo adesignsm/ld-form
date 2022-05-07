@@ -12,15 +12,14 @@ const App = () => {
 
         if (navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i)) {
             alert("mobile");
-        }
-
-        if (scrolled >= 0.9) {
             document.getElementById("submit-button").style.display = "block";
         } else {
-            document.getElementById("submit-button").style.display = "none";
+            if (scrolled >= 0.9) {
+                document.getElementById("submit-button").style.display = "block";
+            } else {
+                document.getElementById("submit-button").style.display = "none";
+            }
         }
-
-        console.log(scrolled);
     }
     return (
         <div id = "wrapper">
