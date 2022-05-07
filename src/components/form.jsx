@@ -64,7 +64,6 @@ const Form = () => {
 
                 if (userFlag === true && emailFlag === true && numberFlag === true) {
                     writeUserData(username, email, ld_number);
-                    console.log(username, email, ld_number);
 
                     if (writeToFirebase === true) {
                         document.getElementById("server-status").innerHTML = "Your life design info has been stored succesfully!";
@@ -72,8 +71,6 @@ const Form = () => {
                     } 
                 } else {
                     // console.log("FAIL");
-                    let form = document.getElementById("LD-form");
-                    form.addEventListener("submit", (e) => {e.preventDefault()});
                     document.getElementById("server-status").innerHTML = "One or more of the entires already exist.";
                     document.getElementById("submit-button").style.backgroundColor = "#ff0000";
                 }
