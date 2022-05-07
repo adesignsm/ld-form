@@ -10,7 +10,7 @@ const App = () => {
         const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
         const scrolled = windowScroll / height;
 
-        if (scrolled >= 1) {
+        if (scrolled >= 0.9) {
             document.getElementById("submit-button").style.display = "block";
         } else {
             document.getElementById("submit-button").style.display = "none";
