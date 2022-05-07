@@ -91,11 +91,12 @@ const Form = () => {
         writeToFirebase = true;
     }
 
-    const writeScreenShotData = (name, base64Img) => {
+    const writeScreenShotData = (name, email, base64Img) => {
         const db = getDatabase();
 
         set(ref(db, "screenshots/" + name), {
            name: name,
+           email: email,
            baseURI:  base64Img
         });
     }
@@ -147,7 +148,7 @@ const Form = () => {
 
             // document.body.appendChild(screenshot);
 
-            writeScreenShotData(nameData, base64Img);
+            writeScreenShotData(nameData, emailData, base64Img);
         })
     }
     
