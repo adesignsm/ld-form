@@ -11,7 +11,6 @@ const App = () => {
         const scrolled = windowScroll / height;
 
         if (navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i)) {
-            alert("mobile");
             document.getElementById("submit-button").style.display = "block";
         } else {
             if (scrolled >= 0.9) {
