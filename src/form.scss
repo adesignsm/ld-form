@@ -99,7 +99,7 @@ input:focus {
 }
 
 label {
-    font-size: 40px;
+    font-size: 4vw;
     line-height: 50px;
     color: #f7fc9f;
     box-shadow: none;
@@ -140,8 +140,13 @@ label, h1, button, input {
 //mobile
 @media only screen and (min-width: 200px) and (max-width: 500px) {
     input[type=text], input[type=number], input[type=email] {
-        margin-top: -100px;
+        margin-top: -50px;
         font-size: 20vw;
+    }
+
+    label {
+        font-size: 10vw;
+        width: 100%;
     }
 
     header {
@@ -175,7 +180,7 @@ label, h1, button, input {
 //tablet
 @media only screen and (min-width: 501px) and (max-width: 1180px) {
     input[type=text], input[type=number], input[type=email] {
-        margin-top: -50px;
+        margin-top: -80px;
         font-size: 20vw;
     }
 
@@ -235,15 +240,17 @@ label, h1, button, input {
         top: 0;
 
         img {
-            margin-top: -70px;
-            margin-right: -60px;
+            position: fixed;
+            top: -90px;
+            right: -90px;
+            z-index: 999;
             width: 25%;
-            float: right;
         }
     }
 
     #form-container {
-        padding-bottom: 200px;
+        margin-top: -200px;
+        transform: scale(0.6);
     }
 
     label {
@@ -272,7 +279,7 @@ label, h1, button, input {
 
     #submit-button {
         height: 180px;
-        display: none;
+        // display: none;
         padding-top: 20px;
     }
 }

@@ -62,6 +62,7 @@ const Form = () => {
                         serverStatus = "email already exists"
                     } else if (dataSnapshot[data].ld_number.indexOf(ld_number) !== -1) {
                         numberFlag = false;
+                        console.log(ld_number);
                         serverStatus = "number already exists";
                     }
                 }
@@ -209,48 +210,50 @@ const Form = () => {
                             convertToLower(document.getElementById("name-input"));
                         }}
                         ></input>
-                        {/* <br /> */}
+                        <br />
 
                         <label htmlFor = "ld-number" onClick={() => {document.getElementById("ld-number-input").focus({preventScroll: true})}}> LD NUMBER: </label>
                         <h1 id = "number-capture"></h1>
                         <input class = "capture-content" autoComplete = "off" required type="number" id="ld-number-input" name="ld-number" 
                             onWheel={(e) => e.target.blur()}
-                            onChange={(e) => {setLdNumberData(e.target.value)}}
-                            onBlur = {(e) => {
-                                if (e.target.value.length > 1 && e.target.value < 200) {
-                                    numberFlag = false;
-                                    alert("Number must be above 200");
-                                }
-                            }}
-                            onKeyDown={(e) => {
-                                console.log(e.target.id);
-                                console.log(document.activeElement.id);
+                            onChange={(e) => {
+                                console.log(e.target.value);
                                 convertToLower(document.getElementById("ld-number-input"));
+
                                 if (e.target.value.length >= 4) {
                                     e.target.value = e.target.value.substring(0, 3);
                                 }
 
-                                if (Number(ldNumberData) < 200){
+                                if (Number(e.target.value) < 200){
                                     document.getElementById("ld-number-input").style.border = "3px solid #ff0000";
                                     document.getElementById("ld-number-input").style.borderRadius = "10px";
 
-                                    if (ldNumberData.length > 2 && e.target.value < 200 && e.key !== "Backspace") {
+                                    if (e.target.value.length > 2 && e.target.value < 200 && e.key !== "Backspace") {
                                         numberFlag = false;
                                         e.preventDefault();
                                         alert("Number must be above 200!");
                                     } else {
                                         numberFlag = true;
                                     }
-                                } else {
-                                    document.getElementById("ld-number-input").style.border = "3px solid #fff"; 
+                                } else if (Number(e.target.value) >= 200){
+                                    
+                                    document.getElementById("ld-number-input").style.border = "3px solid #87ceeb"; 
                                     document.getElementById("ld-number-input").style.borderRadius = "10px";
+                                    setLdNumberData(e.target.value);
+                                    console.log(ldNumberData);
+                                }
+                            }}
+                            onBlur = {(e) => {
+                                if (e.target.value.length > 1 && e.target.value < 200) {
+                                    numberFlag = false;
+                                    alert("Number must be above 200");
                                 }
                             }}
                         />
                         {/* <br /> */}
 
-                        <label htmlFor = "email" onClick={() => {document.getElementById("email-input").focus({preventScroll: true})}}> UUUU CAN EMAiL ME AT: </label>
-                        <input autoComplete = "off" required type = "email" id = "email-input" name = "email" onChange={(e) => {
+                        <label htmlFor = "email" style={{fontSize: 7 + "vw"}} onClick={() => {document.getElementById("email-input").focus({preventScroll: true})}}> UUUU CAN EMAiL ME AT: </label>
+                        <input style={{marginTop: -15 + "px"}}autoComplete = "off" required type = "email" id = "email-input" name = "email" onChange={(e) => {
                             setEmailData(e.target.value);
                             convertToLower(document.getElementById("email-input"));
                             
