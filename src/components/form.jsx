@@ -247,6 +247,8 @@ const Form = () => {
                                 if (e.target.value.length > 1 && e.target.value < 200) {
                                     numberFlag = false;
                                     alert("Number must be above 200");
+                                } else {
+                                    e.target.style.border = "3px solid #fff";
                                 }
                             }}
                         />
