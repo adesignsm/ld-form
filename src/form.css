@@ -174,7 +174,7 @@ label, h1, button, input {
 
 #server-status {
   font-family: "Gecko Lunch";
-  color: #87ceeb;
+  color: #303657;
 }
 
 @media only screen and (min-width: 200px) and (max-width: 500px) {
