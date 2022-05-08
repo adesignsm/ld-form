@@ -172,11 +172,6 @@ label, h1, button, input {
   font-family: "Gecko Lunch";
 }
 
-#server-status {
-  font-family: "Gecko Lunch";
-  color: #414A7B;
-}
-
 @media only screen and (min-width: 200px) and (max-width: 500px) {
   input[type=text], input[type=number], input[type=email] {
     margin-top: -50px;
@@ -200,11 +195,6 @@ label, h1, button, input {
   #LD-form {
     z-index: 999;
     margin-top: 120px;
-  }
-  #server-status {
-    margin-top: 10px;
-    font-size: 15px;
-    color: #414A7B;
   }
   #submit-button {
     padding-top: 10px;
@@ -241,11 +231,6 @@ label, h1, button, input {
   }
   #name-capture {
     margin-top: -80px;
-  }
-  #server-status {
-    margin-top: 15px;
-    font-size: 30px;
-    color: #414A7B;
   }
   #submit-button {
     height: 170px;
@@ -289,11 +274,6 @@ label, h1, button, input {
   }
   #name-capture {
     margin-top: -160px;
-  }
-  #server-status {
-    margin-top: 20px;
-    font-size: 20px;
-    color: #414A7B;
   }
   #submit-button {
     height: 120px;

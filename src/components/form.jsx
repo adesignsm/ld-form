@@ -71,14 +71,13 @@ const Form = () => {
                     writeUserData(username, email, ld_number);
 
                     if (writeToFirebase === true) {
-                        document.getElementById("server-status").innerHTML = "UUUU have completed your life design account";
+                        document.getElementById("submit-button").innerHTML = "UUUU have completed your life design account";
+                        document.getElementById("submit-button").style.fontSize = "5vw";
                         document.getElementById("submit-button").style.backgroundColor = "#39D077";
                     } 
                 } else {
                     // console.log("FAIL");
                     alert(serverStatus);
-                    document.getElementById("server-status").innerHTML = "";
-                    document.getElementById("submit-button").style.backgroundColor = "#ff0000";
                 }
             } else {
                 writeUserData(username, email, ld_number);
