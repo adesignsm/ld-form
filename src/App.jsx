@@ -5,21 +5,21 @@ import "./main.css";
 
 const App = () => {
 
-    window.onscroll = (e) => {
-        const windowScroll = document.body.scrollTop || document.documentElement.scrollTop;
-        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = windowScroll / height;
+    // window.onscroll = (e) => {
+    //     const windowScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    //     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    //     const scrolled = windowScroll / height;
 
-        if (navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i)) {
-            document.getElementById("submit-button").style.display = "block";
-        } else {
-            if (scrolled >= 0.9) {
-                document.getElementById("submit-button").style.display = "block";
-            } else {
-                document.getElementById("submit-button").style.display = "none";
-            }
-        }
-    }
+    //     if (navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i)) {
+    //         document.getElementById("submit-button").style.display = "block";
+    //     } else {
+    //         if (scrolled >= 0.9) {
+    //             document.getElementById("submit-button").style.display = "block";
+    //         } else {
+    //             document.getElementById("submit-button").style.display = "none";
+    //         }
+    //     }
+    // }
     return (
         <div id = "wrapper">
             <Form />

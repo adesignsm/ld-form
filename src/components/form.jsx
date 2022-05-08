@@ -71,7 +71,7 @@ const Form = () => {
                     writeUserData(username, email, ld_number);
 
                     if (writeToFirebase === true) {
-                        document.getElementById("server-status").innerHTML = "Your life design info has been stored succesfully!";
+                        document.getElementById("server-status").innerHTML = "UUUU have completed your life design account";
                         document.getElementById("submit-button").style.backgroundColor = "#39D077";
                     } 
                 } else {
