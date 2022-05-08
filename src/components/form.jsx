@@ -187,7 +187,7 @@ const Form = () => {
 
             setTimeout(() => {
                 window.location.reload();
-            }, 1500);
+            }, 5000);
         }
     }
 
