@@ -248,7 +248,7 @@ const Form = () => {
                                     numberFlag = false;
                                     alert("Number must be above 200");
                                 } else {
-                                    e.target.style.border = "3px solid #fff";
+                                    e.target.style.border = "transparent";
                                 }
                             }}
                         />
