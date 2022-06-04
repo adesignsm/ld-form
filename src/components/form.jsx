@@ -211,7 +211,7 @@ const Form = () => {
                         ></input>
                         <br />
 
-                        <label htmlFor = "ld-number" onClick={() => {document.getElementById("ld-number-input").focus({preventScroll: true})}}> LD NUMBER: </label>
+                        <label htmlFor = "ld-number" onClick={() => {document.getElementById("ld-number-input").focus({preventScroll: true})}}> LiFE DESiGNER NUMBER: </label>
                         <h1 id = "number-capture"></h1>
                         <input class = "capture-content" autoComplete = "off" required type="number" id="ld-number-input" name="ld-number" 
                             onWheel={(e) => e.target.blur()}
@@ -307,7 +307,7 @@ const Form = () => {
 
                 }}
                 
-                > SUBMIT </button>
+                > SUBMiT </button>
             </div>
         </React.Fragment>
     )
